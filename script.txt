@@ -1,14 +1,6 @@
 
 
 
-function pushParagraphsToJournalApi(bookName, paragraphs) {
-  for (var i = 0; i < paragraphs.length; i++) {
-    console.log(paragraphs[i]);
-
-  }
-}
-
-
 function createHighlightsFile(bookNotesFolder, name) {
   var bookTitle = getBookTitle(name)
   var highlightsName = "Highlights from: " + bookTitle;
@@ -41,7 +33,6 @@ function processDokument(sourceDoc, highlightsDoc) {
 
   var paragraphs = doc.getParagraphs();
   var resultParagraphts = []
-  var resultString = "";
   var subject = "";
   var highlightsBody = highlightsDoc.getBody();
   highlightsBody.appendParagraph("dzilam");
@@ -52,34 +43,33 @@ function processDokument(sourceDoc, highlightsDoc) {
     var paragraphText = paragraphs[i].getText();
     console.log(paragraphText);
     var paragraphAtributes = paragraphs[i].getAttributes();
-    if (paragraphAtributes.FONT_SIZE == 16 && paragraphText != "" && resultString != "") {
-      console.log("Publishing the chapter")
-      console.log(resultString);
-       var p=paragraphs[i].copy();
-      var header=highlightsBody.appendParagraph(p);
-      header.setHeading(DocumentApp.ParagraphHeading.HEADING1);
-      
-      resultString = ""
-    }
+    // if (paragraphAtributes.FONT_SIZE == 16 && paragraphText != "" && resultString != "") {
+    //   console.log("Publishing the chapter")
+    //   console.log(resultString);
+    //    var p=paragraphs[i].copy();
+    //   var header=highlightsBody.appendParagraph(p);
+    //   header.setHeading(DocumentApp.ParagraphHeading.HEADING1);
 
-    if (paragraphAtributes.FONT_SIZE == 16 && resultString == "") {
+    //   resultString = ""
+    // }
+
+    if (paragraphAtributes.FONT_SIZE == 16 && paragraphText != "") {
       subject = paragraphText;
-      var p=paragraphs[i].copy();
-      highlightsBody.appendParagraph(p);
-            resultString += paragraphText;
-
-//      resultString = getOpening(subject);
+      var p = paragraphs[i].copy();
+      // highlightsBody.appendParagraph(p);
+      var item1 = highlightsBody.appendListItem(paragraphText).setGlyphType(DocumentApp.GlyphType.BULLET);
+      var header = highlightsBody.appendParagraph(p);
+      header.setHeading(DocumentApp.ParagraphHeading.HEADING1);
+      //      resultString = getOpening(subject);
     }
 
     if (paragraphAtributes.BACKGROUND_COLOR == "#fde096" && paragraphText != "") {
       //console.log(x);
       //console.log(z.BACKGROUND_COLOR)
       resultParagraphts.push(paragraphText);
-         var p=paragraphs[i].copy();
-      highlightsBody.appendParagraph(p);
-      resultString += paragraphText;
-      //resultString += ',{"type":"ul","children":[{"type":"li","children":[{"type":"lic","children":[{"text":"' + paragraphText + '"}]}]}]}';
-
+      var p = paragraphs[i].copy();
+      //      highlightsBody.appendParagraph(p);
+      var item1 = highlightsBody.appendListItem(paragraphText).setGlyphType(DocumentApp.GlyphType.BULLET);
     }
   }
   //CreateJournal(bookName,resultString)
