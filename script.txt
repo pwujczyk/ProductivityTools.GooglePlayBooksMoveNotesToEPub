@@ -1,16 +1,27 @@
-
-
-
-function createHighlightsFile(bookNotesFolder, name) {
-  var bookTitle = getBookTitle(name)
+function getHighlitsFileName(sourceFileName) {
+  var bookTitle = getBookTitle(sourceFileName)
   var highlightsName = "Highlights from: " + bookTitle;
+  return highlightsName;
+}
+
+function createHighlightsFile(bookNotesFolder, sourceFileName) {
+  highlightsName = getHighlitsFileName(sourceFileName);
   var doc = DocumentApp.create(highlightsName);
   docFile = DriveApp.getFileById(doc.getId());
   bookNotesFolder.addFile(docFile);
   return doc;
 }
 
-function getBookTitle(documentName) {
+function checkIfFileExists(bookNotesFolder, name) {
+  highlightsName = getHighlitsFileName(name);
+  var files = bookNotesFolder.getFilesByName(highlightsName)
+  if (files.hasNext()) {
+    return true;
+  }
+  return false;
+}
+
+function getBookTitle(name) {
   if (name.includes("Notatki")) {
     var startPosition = name.indexOf("„")
     var bookName = name.substring(startPosition + 1, name.length - 1)
@@ -42,8 +53,6 @@ function processDokument(sourceDoc, highlightsDoc) {
 
     if (paragraphAtributes.FONT_SIZE == 16 && paragraphText != "") {
       var p = paragraphs[i].copy();
-      // highlightsBody.appendParagraph(p);
-      //var item1 = highlightsBody.appendListItem(paragraphText).setGlyphType(DocumentApp.GlyphType.BULLET);
       var header = highlightsBody.appendParagraph(p);
       header.setHeading(DocumentApp.ParagraphHeading.HEADING2);
     }
@@ -56,14 +65,22 @@ function processDokument(sourceDoc, highlightsDoc) {
 
 function processDirectory() {
   var bookNotesFolder = DriveApp.getFoldersByName("Book notes").next();
-  var files = bookNotesFolder.getFiles()
-  while (files.hasNext()) {
-    file = files.next();
-    name = file.getName();
-    console.log(name);
+  var sourceFiles = bookNotesFolder.getFiles()
 
-    highlightsDoc = createHighlightsFile(bookNotesFolder, name);
-    processDokument(file, highlightsDoc);
+
+
+  while (sourceFiles.hasNext()) {
+    file = sourceFiles.next();
+    sourceFileName = file.getName();
+    if (sourceFileName.startsWith("Highlights")) {
+      continue;
+    }
+    console.log(sourceFileName);
+    var fileExists = checkIfFileExists(bookNotesFolder, sourceFileName);
+    if (fileExists == false) {
+      highlightsDoc = createHighlightsFile(bookNotesFolder, sourceFileName);
+      processDokument(file, highlightsDoc);
+    }
     break;
   }
 
