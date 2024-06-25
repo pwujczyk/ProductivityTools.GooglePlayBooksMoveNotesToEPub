@@ -65,6 +65,7 @@ function processDokument(sourceDoc, highlightsDoc) {
 
 function processDirectory() {
   var bookNotesFolder = DriveApp.getFoldersByName("Book notes").next();
+  var bookhighligths  = DriveApp.getFoldersByName("Book highligths").next();
   var sourceFiles = bookNotesFolder.getFiles()
 
 
@@ -72,16 +73,15 @@ function processDirectory() {
   while (sourceFiles.hasNext()) {
     file = sourceFiles.next();
     sourceFileName = file.getName();
-    if (sourceFileName.startsWith("Highlights")) {
-      continue;
-    }
+    // if (sourceFileName.startsWith("Highlights")) {
+    //   continue;
+    // }
     console.log(sourceFileName);
-    var fileExists = checkIfFileExists(bookNotesFolder, sourceFileName);
+    var fileExists = checkIfFileExists(bookhighligths, sourceFileName);
     if (fileExists == false) {
-      highlightsDoc = createHighlightsFile(bookNotesFolder, sourceFileName);
+      highlightsDoc = createHighlightsFile(bookhighligths, sourceFileName);
       processDokument(file, highlightsDoc);
     }
-    break;
   }
 
 }
