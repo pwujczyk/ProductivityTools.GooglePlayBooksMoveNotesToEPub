@@ -58,14 +58,16 @@ function processDokument(sourceDoc, highlightsDoc) {
     }
 
     if (paragraphAtributes.BACKGROUND_COLOR == "#fde096" && paragraphText != "") {
-      var item1 = highlightsBody.appendListItem(paragraphText).setGlyphType(DocumentApp.GlyphType.BULLET);
+      //var item1 = highlightsBody.appendListItem(paragraphText).setGlyphType(DocumentApp.GlyphType.BULLET);
+      var paragraphWithBullet=String.fromCharCode("0x2022")+ " "+paragraphText
+      highlightsBody.appendParagraph( paragraphWithBullet)
     }
   }
 }
 
 function processDirectory() {
   var bookNotesFolder = DriveApp.getFoldersByName("Book notes").next();
-  var bookhighligths  = DriveApp.getFoldersByName("Book highligths").next();
+  var bookhighligths = DriveApp.getFoldersByName("Book highligths").next();
   var sourceFiles = bookNotesFolder.getFiles()
 
 
