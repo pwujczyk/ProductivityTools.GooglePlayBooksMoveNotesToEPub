@@ -58,9 +58,9 @@ function processDokument(sourceDoc, highlightsDoc) {
     }
 
     if (paragraphAtributes.BACKGROUND_COLOR == "#fde096" && paragraphText != "") {
-      //var item1 = highlightsBody.appendListItem(paragraphText).setGlyphType(DocumentApp.GlyphType.BULLET);
-      var paragraphWithBullet=String.fromCharCode("0x2022")+ " "+paragraphText
-      highlightsBody.appendParagraph( paragraphWithBullet)
+      var item1 = highlightsBody.appendListItem(paragraphText).setGlyphType(DocumentApp.GlyphType.BULLET);
+      //var paragraphWithBullet=String.fromCharCode("0x2022")+ " "+paragraphText
+      //highlightsBody.appendParagraph( paragraphWithBullet)
     }
   }
 }
